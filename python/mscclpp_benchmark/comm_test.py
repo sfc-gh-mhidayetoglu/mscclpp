@@ -20,6 +20,23 @@ from mscclpp_op import (
 # from nccl_op import NcclAllReduce
 import mscclpp.comm as mscclpp_comm
 import ipaddress
+import netifaces as ni
+
+
+def get_netinterface_info():
+    """
+    Returns the name of the first network interface with a valid IP address that it finds.
+    """
+    interfaces = ni.interfaces()
+    for interface in interfaces:
+        addresses = ni.ifaddresses(interface)
+        if ni.AF_INET in addresses:
+            for addr in addresses[ni.AF_INET]:
+                ip_address = addr["addr"]
+                if is_valid(ip_address):
+                    print(f"Selected Interface: {interface}, IP Address: {ip_address}")
+                    return interface, ip_address
+    return None, None
 
 # create a MscclppGroup
 network_interface, my_ip = get_netinterface_info()
