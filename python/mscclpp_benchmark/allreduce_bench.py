@@ -312,7 +312,7 @@ if __name__ == "__main__":
         size, mscclpp_algBw, nccl_algBw, speed_up = run_benchmark(mscclpp_group, nccl_comm, table, 100, nelems)
         sizes.append(size)
         if MPI.COMM_WORLD.rank == 0:
-            print(f"size: {size}, mscclpp_algBw: {mscclpp_algBw} GB/s, nccl_algBw: {nccl_algBw} GB/s, speed_up: {speed_up}x")
+            print(f"size: {size} bytes, mscclpp_algBw: {mscclpp_algBw:.2f} GB/s, nccl_algBw: {nccl_algBw:.2f} GB/s, speed_up: {speed_up:.2f}x")
         mscclpp_algbw.append(mscclpp_algBw)
         nccl_algbw.append(nccl_algBw)
         speed_ups.append(speed_up)
