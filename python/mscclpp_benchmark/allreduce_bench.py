@@ -154,8 +154,8 @@ def find_best_config(mscclpp_call, niter):
         if cur_time < best_time:
             best_time = cur_time
             best_config = config
-        if MPI.COMM_WORLD.rank == 0:
-            print(f"t\n", flush=True)
+        # if MPI.COMM_WORLD.rank == 0:
+        #     print(f"t\n", flush=True)
     best_config = MPI.COMM_WORLD.bcast(best_config, root=0)
     if MPI.COMM_WORLD.rank == 0:
         print(f"best config: {best_config}\n", flush=True)
