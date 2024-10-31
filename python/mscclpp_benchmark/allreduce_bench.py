@@ -140,7 +140,7 @@ def find_best_algo(mscclpp_algos, niter):
             best_algo = algo
             algo.set_params(*config)
     if MPI.COMM_WORLD.rank == 0:
-        print(best_algo, end="", flush=True)
+        print(f"best algo: {best_algo}\n", flush=True)
     return best_algo
 
 
@@ -302,7 +302,8 @@ if __name__ == "__main__":
             break  # due to trigger bit width limitation, we can only support up to 2**32
 
         if MPI.COMM_WORLD.rank == 0:
-            print(f"Running benchmark for {human_readable_size(nelems * data_type().itemsize)}\n", end="", flush=True)
+            print(f"Running benchmark for {human_readable_size(nelems * data_type().itemsize)}\n", flush=True)
+            print(f"")
         size, mscclpp_algBw, nccl_algBw, speed_up = run_benchmark(mscclpp_group, nccl_comm, table, 100, nelems)
         sizes.append(size)
         mscclpp_algbw.append(mscclpp_algBw)
