@@ -22,7 +22,9 @@ import mscclpp.comm as mscclpp_comm
 
 # create a MscclppGroup
 network_interface, my_ip = get_netinterface_info()
-root_ip = MPI.COMM_WORLD.bcast(my_ip, root=0)
+root_ip = torch.tensor(my_ip, device=my_device)
+dist.broadcast(root_ip, src=root_rank)
+root_ip = root_ip.item()
 ifIpPortTrio = network_interface + ":" + root_ip + ":50000"  # some random port
 mscclpp_group = mscclpp_comm.CommGroup(
     interfaceIpPortTrio=ifIpPortTrio, rank=my_rank, size=world_size
