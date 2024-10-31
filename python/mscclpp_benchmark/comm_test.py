@@ -22,6 +22,13 @@ import mscclpp.comm as mscclpp_comm
 import ipaddress
 import netifaces as ni
 
+def is_valid(ip):
+    """
+    Check if the IP address is valid for connecting to other devices.
+    This excludes loopback (127.0.0.1) and link-local (169.254.x.x) addresses.
+    """
+    ip_obj = ipaddress.ip_address(ip)
+    return not (ip_obj.is_loopback or ip_obj.is_link_local or ip_obj.is_multicast)
 
 def get_netinterface_info():
     """
