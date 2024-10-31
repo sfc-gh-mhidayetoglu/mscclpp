@@ -65,12 +65,12 @@ from mscclpp import ProxyService, is_nvls_supported
 min_i = 0
 max_i = 28 if is_nvls_supported() else 29
 
-print(f"Hello from {my_rank}\n")
 for i in range(min_i, max_i):
     count = 2**i
     buffer = memory[:count]
     buffer_out = memory_out[:count]
-    print(f"Count: {count}, Buffer Size: {buffer.element_size() * buffer.nelement() / 1e6:.2f} MB, Buffer Out Size: {buffer_out.element_size() * buffer_out.nelement() / 1e6:.2f} MB")
+    if my_rank == root_rank:
+        print(f"Count: {count}, Buffer Size: {buffer.element_size() * buffer.nelement() / 1e6:.2f} MB, Buffer Out Size: {buffer_out.element_size() * buffer_out.nelement() / 1e6:.2f} MB")
 
 
 mscclpp_group = None
