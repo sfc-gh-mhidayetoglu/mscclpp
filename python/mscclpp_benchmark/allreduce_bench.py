@@ -152,10 +152,10 @@ def find_best_config(mscclpp_call, niter):
             best_time = cur_time
             best_config = config
         if MPI.COMM_WORLD.rank == 0:
-            print("t", end="", flush=True)
+            print(f"t\n", flush=True)
     best_config = MPI.COMM_WORLD.bcast(best_config, root=0)
     if MPI.COMM_WORLD.rank == 0:
-        print(best_config, end="", flush=True)
+        print(f"best config: {best_config}\n", flush=True)
     return best_config, best_time
 
 
@@ -303,7 +303,6 @@ if __name__ == "__main__":
 
         if MPI.COMM_WORLD.rank == 0:
             print(f"Running benchmark for {human_readable_size(nelems * data_type().itemsize)}\n", flush=True)
-            print(f"")
         size, mscclpp_algBw, nccl_algBw, speed_up = run_benchmark(mscclpp_group, nccl_comm, table, 100, nelems)
         sizes.append(size)
         mscclpp_algbw.append(mscclpp_algBw)
