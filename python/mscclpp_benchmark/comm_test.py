@@ -19,6 +19,7 @@ from mscclpp_op import (
 )
 # from nccl_op import NcclAllReduce
 import mscclpp.comm as mscclpp_comm
+import ipaddress
 
 # create a MscclppGroup
 network_interface, my_ip = get_netinterface_info()
