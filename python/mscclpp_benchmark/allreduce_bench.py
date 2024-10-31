@@ -127,8 +127,8 @@ def bench_time(niter: int, func):
     end.synchronize()
 
     time = cp.cuda.get_elapsed_time(start, end) / niter * 1000.0
-    if MPI.COMM_WORLD.rank == 0:
-        print(f"event time: {time} us\n", flush=True)
+    # if MPI.COMM_WORLD.rank == 0:
+    #     print(f"event time: {time} us\n", flush=True)
     return time
 
 
