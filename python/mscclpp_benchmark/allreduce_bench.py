@@ -126,7 +126,10 @@ def bench_time(niter: int, func):
     end.record(stream)
     end.synchronize()
 
-    return cp.cuda.get_elapsed_time(start, end) / niter * 1000.0
+    time = cp.cuda.get_elapsed_time(start, end) / niter * 1000.0
+    if MPI.COMM_WORLD.rank == 0:
+        print(f"event time: {time} us\n", flush=True)
+    return time
 
 
 def find_best_algo(mscclpp_algos, niter):
