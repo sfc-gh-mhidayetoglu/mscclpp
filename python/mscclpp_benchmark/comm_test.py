@@ -56,3 +56,6 @@ mscclpp_group = mscclpp_comm.CommGroup(
 )
 
 print(f"Hello from {my_rank}\n")
+
+
+mscclpp_group = None
