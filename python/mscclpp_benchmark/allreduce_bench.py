@@ -121,7 +121,8 @@ def bench_time(niter: int, func):
     start = cp.cuda.Event()
     end = cp.cuda.Event()
 
-    # insert barrier
+    # synchronize
+    stream.synchronize()
     MPI.COMM_WORLD.barrier()
 
     start.record(stream)
