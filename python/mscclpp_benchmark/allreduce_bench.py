@@ -121,6 +121,9 @@ def bench_time(niter: int, func):
     start = cp.cuda.Event()
     end = cp.cuda.Event()
 
+    # insert barrier
+    MPI.COMM_WORLD.barrier()
+
     start.record(stream)
     graph.launch(stream)
     end.record(stream)
@@ -308,6 +311,7 @@ if __name__ == "__main__":
             print(f"Running benchmark for {human_readable_size(nelems * data_type().itemsize)}\n", flush=True)
         size, mscclpp_algBw, nccl_algBw, speed_up = run_benchmark(mscclpp_group, nccl_comm, table, 100, nelems)
         sizes.append(size)
+        print(f"size: {size}, mscclpp_algBw: {mscclpp_algBw}, nccl_algBw: {nccl_algBw}, speed_up: {speed_up}")
         mscclpp_algbw.append(mscclpp_algBw)
         nccl_algbw.append(nccl_algBw)
         speed_ups.append(speed_up)
