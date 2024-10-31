@@ -77,7 +77,7 @@ for i in range(min_i, max_i):
     buffer = memory[:count]
     buffer_out = memory_out[:count]
     if my_rank == root_rank:
-        print(f"Count: {count}, Buffer Size: {human_readable_size(buffer.element_size() * buffer.nelement())} Buffer Out Size: {human_readable_size(buffer_out.element_size() * buffer_out.nelement())}")
+        print(f"i {i} Count: {count}, Buffer Size: {human_readable_size(buffer.element_size() * buffer.nelement())} Buffer Out Size: {human_readable_size(buffer_out.element_size() * buffer_out.nelement())}")
 
 
 mscclpp_group = None
