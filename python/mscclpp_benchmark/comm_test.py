@@ -72,18 +72,25 @@ mscclpp_group = mscclpp_comm.CommGroup(
 
 max_count = 2**31
 data_type = cp.float16 # torch.float16
-memory = torch.zeros(max_count, dtype=data_type, device=my_device)
-memory_out = torch.zeros_like(memory)
+# memory = torch.zeros(max_count, dtype=data_type, device=my_device)
+# memory_out = torch.zeros_like(memory)
+memory = cp.zeros(max_count, dtype=data_type)
+memory_out = cp.zeros_like(memory)
 
 min_i = 0
 max_i = 28 if is_nvls_supported() else 29
 for i in range(min_i, max_i):
     count = 2**i
-    buffer = memory.narrow(0, 0, count)
-    buffer_out = memory_out.narrow(0, 0, count)
-    # algo = MscclppAllReduce2(mscclpp_group, buffer, buffer_out)
+    # buffer = memory.narrow(0, 0, count)
+    # buffer_out = memory_out.narrow(0, 0, count)
+    buffer = memory[:count]
+    buffer_out = memory_out[:count]
+    algo = MscclppAllReduce2(mscclpp_group, buffer, buffer_out)
     if my_rank == root_rank:
-        print(f"i {i} Count: {count}, Buffer Size: {human_readable_size(buffer.element_size() * buffer.nelement())} Buffer Out Size: {human_readable_size(buffer_out.element_size() * buffer_out.nelement())}")
+        # print(f"i {i} Count: {count}, Buffer Size: {human_readable_size(buffer.element_size() * buffer.nelement())} Buffer Out Size: {human_readable_size(buffer_out.element_size() * buffer_out.nelement())}")
+        print(f"i {i} Count: {count}, Buffer Size: {human_readable_size(buffer.nbytes)} Buffer Out Size: {human_readable_size(buffer_out.nbytes)}")
+    if my_rank == root_rank:
+        print(f"")
 
 
 mscclpp_group = None
