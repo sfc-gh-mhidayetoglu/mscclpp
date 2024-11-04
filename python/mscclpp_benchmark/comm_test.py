@@ -85,9 +85,8 @@ for i in range(min_i, max_i):
     # buffer_out = memory_out.narrow(0, 0, count)
     buffer = memory[:count]
     buffer_out = memory_out[:count]
-    algo = MscclppAllReduce2(mscclpp_group, buffer, buffer_out)
+    # algo = MscclppAllReduce2(mscclpp_group, buffer, buffer_out)
     if my_rank == root_rank:
-        # print(f"i {i} Count: {count}, Buffer Size: {human_readable_size(buffer.element_size() * buffer.nelement())} Buffer Out Size: {human_readable_size(buffer_out.element_size() * buffer_out.nelement())}")
         print(f"i {i} Count: {count}, Buffer Size: {human_readable_size(buffer.nbytes)} Buffer Out Size: {human_readable_size(buffer_out.nbytes)}")
 
 torch.cuda.synchronize()
