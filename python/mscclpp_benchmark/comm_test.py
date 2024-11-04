@@ -56,6 +56,9 @@ torch.cuda.set_device(my_rank % torch.cuda.device_count())
 my_device = torch.cuda.current_device()
 root_rank = 7
 
+if my_rank == root_rank:
+    print(f"Rank: {my_rank}, World Size: {world_size}, Device: {my_device}")
+
 # create a MscclppGroup
 network_interface, my_ip = get_netinterface_info()
 my_ip_tensor = torch.tensor([int(octet) for octet in my_ip.split('.')], device=my_device, dtype=torch.int32)
