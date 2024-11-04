@@ -89,8 +89,5 @@ for i in range(min_i, max_i):
     if my_rank == root_rank:
         # print(f"i {i} Count: {count}, Buffer Size: {human_readable_size(buffer.element_size() * buffer.nelement())} Buffer Out Size: {human_readable_size(buffer_out.element_size() * buffer_out.nelement())}")
         print(f"i {i} Count: {count}, Buffer Size: {human_readable_size(buffer.nbytes)} Buffer Out Size: {human_readable_size(buffer_out.nbytes)}")
-    if my_rank == root_rank:
-        print(f"")
-
 
 mscclpp_group = None
