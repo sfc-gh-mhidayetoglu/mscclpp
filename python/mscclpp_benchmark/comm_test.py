@@ -21,6 +21,16 @@ from mscclpp_op import (
 import mscclpp.comm as mscclpp_comm
 import ipaddress
 import netifaces as ni
+from mscclpp import ProxyService, is_nvls_supported
+
+
+def human_readable_size(size, decimal_places=1):
+    for unit in ["B", "KiB", "MiB", "GiB", "TiB", "PiB"]:
+        if size < 1024.0 or unit == "PiB":
+            break
+        size /= 1024.0
+    return f"{size:.{decimal_places}f} {unit}"
+
 
 def is_valid(ip):
     """
@@ -60,22 +70,13 @@ data_type = torch.float16
 memory = torch.zeros(max_count, dtype=data_type, device=my_device)
 memory_out = torch.zeros_like(memory)
 
-from mscclpp import ProxyService, is_nvls_supported
-
 min_i = 0
 max_i = 28 if is_nvls_supported() else 29
-
-def human_readable_size(size, decimal_places=1):
-    for unit in ["B", "KiB", "MiB", "GiB", "TiB", "PiB"]:
-        if size < 1024.0 or unit == "PiB":
-            break
-        size /= 1024.0
-    return f"{size:.{decimal_places}f} {unit}"
-
 for i in range(min_i, max_i):
     count = 2**i
-    buffer = memory[:count]
-    buffer_out = memory_out[:count]
+    buffer = memory.narrow(0, 0, count)
+    buffer_out = memory_out.narrow(0, 0, count)
+    algo = MscclppAllReduce2(mscclpp_group, buffer, buffer_out)
     if my_rank == root_rank:
         print(f"i {i} Count: {count}, Buffer Size: {human_readable_size(buffer.element_size() * buffer.nelement())} Buffer Out Size: {human_readable_size(buffer_out.element_size() * buffer_out.nelement())}")
 
