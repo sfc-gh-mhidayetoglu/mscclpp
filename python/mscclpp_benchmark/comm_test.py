@@ -1,5 +1,6 @@
 import torch
 import torch.distributed as dist
+import cupy as cp
 
 from mscclpp_op import (
     MscclppAllReduce1,
@@ -70,7 +71,7 @@ mscclpp_group = mscclpp_comm.CommGroup(
 )
 
 max_count = 2**31
-data_type = torch.float16
+data_type = cp.float16 # torch.float16
 memory = torch.zeros(max_count, dtype=data_type, device=my_device)
 memory_out = torch.zeros_like(memory)
 
