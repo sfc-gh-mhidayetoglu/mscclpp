@@ -1,14 +1,6 @@
 import torch
 import torch.distributed as dist
 
-# initialize
-dist.init_process_group(backend='nccl')
-my_rank = dist.get_rank()
-world_size = dist.get_world_size()
-torch.cuda.set_device(my_rank % torch.cuda.device_count())
-my_device = torch.cuda.current_device()
-root_rank = 7
-
 from mscclpp_op import (
     MscclppAllReduce1,
     MscclppAllReduce2,
@@ -55,6 +47,15 @@ def get_netinterface_info():
                     return interface, ip_address
     return None, None
 
+
+# initialize
+dist.init_process_group(backend='nccl')
+my_rank = dist.get_rank()
+world_size = dist.get_world_size()
+torch.cuda.set_device(my_rank % torch.cuda.device_count())
+my_device = torch.cuda.current_device()
+root_rank = 7
+
 # create a MscclppGroup
 network_interface, my_ip = get_netinterface_info()
 my_ip_tensor = torch.tensor([int(octet) for octet in my_ip.split('.')], device=my_device, dtype=torch.int32)
@@ -76,7 +77,7 @@ for i in range(min_i, max_i):
     count = 2**i
     buffer = memory.narrow(0, 0, count)
     buffer_out = memory_out.narrow(0, 0, count)
-    algo = MscclppAllReduce2(mscclpp_group, buffer, buffer_out)
+    # algo = MscclppAllReduce2(mscclpp_group, buffer, buffer_out)
     if my_rank == root_rank:
         print(f"i {i} Count: {count}, Buffer Size: {human_readable_size(buffer.element_size() * buffer.nelement())} Buffer Out Size: {human_readable_size(buffer_out.element_size() * buffer_out.nelement())}")
 
